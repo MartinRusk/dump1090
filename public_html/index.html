@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8"/>
-		<link rel="stylesheet" type="text/css" href="style.css?v=2" />
+		<link rel="stylesheet" type="text/css" href="style.css?v=3.8.1" />
 		<link rel="stylesheet" href="jquery/jquery-ui-1.11.4-smoothness.css" />
 		<script src="jquery/jquery-3.0.0.min.js"></script>
 		<script src="jquery/jquery-ui-1.11.4.min.js"></script>
@@ -14,16 +14,16 @@
                 <link rel="stylesheet" href="ol/ol3-layerswitcher.css" type="text/css"/>
                 <script src="ol/ol3-layerswitcher.js" type="text/javascript"></script>
 
-		<script type="text/javascript" src="config.js"></script>
-		<script type="text/javascript" src="markers.js"></script>
-		<script type="text/javascript" src="dbloader.js"></script>
-		<script type="text/javascript" src="registrations.js"></script>
-		<script type="text/javascript" src="planeObject.js?v=2"></script>
-		<script type="text/javascript" src="formatter.js?v=2"></script>
-		<script type="text/javascript" src="flags.js"></script>
-		<script type="text/javascript" src="layers.js"></script>
-		<script type="text/javascript" src="script.js?v=2"></script>
-		<title>PiAware Skyview</title>
+		<script type="text/javascript" src="config.js?v=3.8.1"></script>
+		<script type="text/javascript" src="markers.js?v=3.8.1"></script>
+		<script type="text/javascript" src="dbloader.js?v=3.8.1"></script>
+		<script type="text/javascript" src="registrations.js?v=3.8.1"></script>
+		<script type="text/javascript" src="planeObject.js?v=3.8.1"></script>
+		<script type="text/javascript" src="formatter.js?v=2?v=3.8.1"></script>
+		<script type="text/javascript" src="flags.js?v=3.8.1"></script>
+		<script type="text/javascript" src="layers.js?v=3.8.1"></script>
+		<script type="text/javascript" src="script.js?v=3.8.1"></script>
+		<title>PiAware SkyAware</title>
 	</head>
 
 	<body onload="initialize()">
@@ -49,8 +49,8 @@
 		<div id="header" class="infoHeading">
 			<div class="logoContainer">
 				<a href="http://flightaware.com/" target="_blank"><img src="images/fa_logo_color.png" alt="FlightAware" class="flightawareLogo" srcset="images/fa_logo_color.png 1x, images/fa_logo_color@2x.png 2x, images/fa_logo_color@3x.png 3x"></a>
-				<img src="images/pa-sv-logo.png" alt="PiAware SkyView" class="adsbLogo piAwareLogo" srcset="images/pa-sv-logo.png 1x, images/pa-sv-logo@2x.png 2x, images/pa-sv-logo@3x.png 3x">
-				<img src="images/ff-sv-logo.png" alt="FlightFeeder SkyView" class="adsbLogo flightfeederLogo" srcset="images/ff-sv-logo.png 1x, images/ff-sv-logo@2x.png 2x, images/ff-sv-logo@3x.png 3x" style="display: none;">
+				<img src="images/pa-sa-logo.png" alt="PiAware SkyAware" class="adsbLogo piAwareLogo" srcset="images/pa-sa-logo.png 1x, images/pa-sa-logo@2x.png 2x, images/pa-sa-logo@3x.png 3x">
+				<img src="images/ff-sa-logo.png" alt="FlightFeeder SkyAware" class="adsbLogo flightfeederLogo" srcset="images/ff-sa-logo.png 1x, images/ff-sa-logo@2x.png 2x, images/ff-sa-logo@3x.png 3x" style="display: none;">
 			</div>
 			<div class="buttonContainer">
 				<div class="dateTime" id="clock_div"></div>
@@ -149,6 +149,26 @@
 						<div class="settingsCheckbox" id="grouptype_checkbox"></div>
 						<div class="settingsText">Group by Data Type</div>
 					</div>
+				</div>
+				<div id="range_ring_column" class="settingsOptionContainer">
+					<div class="infoBlockTitleText">Range Rings</div>
+				<form id="range_ring_form">
+					<div class="rangeOptions">
+						<label><span>Ring Count: </span></label>
+						<input id="range_ring_count" name="ringCount" type="text" class="rangeRingsInput" maxlength="1">
+					</div>
+					<div class="rangeOptions">
+						<label><span >Base Distance: </span></label>
+						<input id="range_ring_base" name="baseRing" type="text" class="rangeRingsInput" maxlength="3">
+					</div>
+					<div class="rangeOptions">
+						<label><span>Distance Interval:</span></label>
+						<input id="range_ring_interval" name="ringInterval" type="text" class="rangeRingsInput" maxlength="3">
+					</div>
+					<div class="set_range_rings_button">
+						<button id="range_rings_button" type="button">Set Range Rings</button>
+					</div>
+				</form>
 				</div>
 			</div>
 
@@ -290,7 +310,7 @@
 										<div class="infoHeading infoRowFluid"><span title="The alphanumeric registration code assigned by the country in which the aircraft is registered.">Registration</span>: </div>
 										<div class="infoData infoRowFluid"><span id="selected_registration">n/a</span></div>
 									</div>
-									<div class="infoRow removePadding">
+									<div id="infoblock_country" class="infoRow removePadding">
 										<div class="infoHeading infoRowFluid">Country of registration: </div>
 										<div class="infoData infoRowFluid"><span id="selected_country">n/a</span></div>
 									</div>
@@ -324,6 +344,16 @@
 											<span id="selected_onground">n/a</span>
 										</div>
 									</div>
+									<div class="infoRowLine">
+                                                                               <div class="infoHeading infoRowFluid fourColumnSection3">
+                                                                                       <span title="Age of the aircraft's last known position.">Position Age</span>:
+                                                                                </div>
+                                                                                <div class="infoData infoRowFluid fourColumnSection4">
+                                                                                        <span id="position_age">n/a</span>
+                                                                                </div>
+                                                                        </div>
+
+
 									<div class="infoRowLine">
 										<div class="infoHeading infoRowFluid fourColumnSection3">
 											<span title="Distance of the aircraft from your ADS-B site at its last known position.">Distance</span>:
@@ -564,6 +594,14 @@
 											<span id="selected_squawk"></span>
 										</div>
 									</div>
+									<div class="infoRowLine">
+                                                                               <div class="infoHeading infoRowFluid fourColumnSection1">
+                                                                                               <span title="The last time your ADS-B site received a position age from the aircraft.">Last Position</span>:
+                                                                               </div>
+                                                                               <div class="infoData infoRowFluid fourColumnSection2">
+                                                                                       <span id="selected_seen_pos"></span>
+                                                                               </div>
+                                                                       </div>
 								</div>
 
 								<div class="sectionTitle">

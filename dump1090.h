@@ -138,6 +138,7 @@ typedef enum {
     SOURCE_MODE_S,         /* data from a Mode S message, no full CRC */
     SOURCE_MODE_S_CHECKED, /* data from a Mode S message with full CRC */
     SOURCE_TISB,           /* data from a TIS-B extended squitter message */
+    SOURCE_ADSR,           /* data from a ADS-R extended squitter message */
     SOURCE_ADSB,           /* data from a ADS-B extended squitter message */
 } datasource_t;
 
@@ -324,10 +325,14 @@ struct {                             // Internal state
     struct net_service *services;    // Active services
     struct client *clients;          // Our clients
 
-    struct net_writer raw_out;       // Raw output
-    struct net_writer beast_out;     // Beast-format output
-    struct net_writer sbs_out;       // SBS-format output
-    struct net_writer fatsv_out;     // FATSV-format output
+    struct net_service *beast_verbatim_service;  // Beast-format output service, verbatim mode
+    struct net_service *beast_cooked_service;    // Beast-format output service, "cooked" mode
+
+    struct net_writer raw_out;                   // AVR-format output
+    struct net_writer beast_verbatim_out;        // Beast-format output, verbatim mode
+    struct net_writer beast_cooked_out;          // Beast-format output, "cooked" mode
+    struct net_writer sbs_out;                   // SBS-format output
+    struct net_writer fatsv_out;                 // FATSV-format output
 
 #ifdef _WIN32
     WSADATA        wsaData;          // Windows socket initialisation
@@ -353,7 +358,7 @@ struct {                             // Internal state
     char *net_output_beast_ports;    // List of Beast output TCP ports
     char *net_bind_address;          // Bind address
     int   net_sndbuf_size;           // TCP output buffer size (64Kb * 2^n)
-    int   net_verbatim;              // if true, send the original message, not the CRC-corrected one
+    int   net_verbatim;              // if true, Beast output connections default to verbatim mode
     int   forward_mlat;              // allow forwarding of mlat messages to output ports
     int   quiet;                     // Suppress stdout
     uint32_t show_only;              // Only show messages from this ICAO
@@ -410,6 +415,7 @@ struct modesMessage {
     int           remote;                         // If set this message is from a remote station
     double        signalLevel;                    // RSSI, in the range [0..1], as a fraction of full-scale power
     int           score;                          // Scoring from scoreModesMessage, if used
+    int           reliable;                       // is this a "reliable" message (uncorrected DF11/DF17/DF18)?
 
     datasource_t  source;                         // Characterizes the overall message source
 
@@ -618,6 +624,7 @@ unsigned modeCToModeA (int modeC);
 void  interactiveInit(void);
 void  interactiveShowData(void);
 void  interactiveCleanup(void);
+void  interactiveNoConnection(void);
 
 // Provided by dump1090.c / view1090.c / faup1090.c
 void receiverPositionChanged(float lat, float lon, float alt);
