@@ -98,6 +98,12 @@ function processReceiverUpdate(data) {
                         if (ShowFlags && plane.icaorange.flag_image !== null) {
                                 $('img', plane.tr.cells[1]).attr('src', FlagPath + plane.icaorange.flag_image);
                                 $('img', plane.tr.cells[1]).attr('title', plane.icaorange.country);
+
+                                if (plane.bpfvPlane) {
+                                        $('img', plane.tr.cells[1]).attr('src', FlagPath + 'Germany_bpfv.png');
+                                        $('img', plane.tr.cells[1]).attr('title', 'BPFV');
+                                }
+
                         } else {
                                 $('img', plane.tr.cells[1]).css('display', 'none');
                         }
@@ -295,7 +301,6 @@ function initialize() {
             customAltitudeColors = false;
         }
 
-
         $("#altitude_filter_reset_button").click(onResetAltitudeFilter);
 
         $('#settingsCog').on('click', function() {
@@ -304,6 +309,13 @@ function initialize() {
 
         $('#settings_close').on('click', function() {
             $('#settings_infoblock').hide();
+        });
+
+        $('#bpfvplane_filter').on('click', function() {
+        	filterBPFVplanes(true);
+        	refreshSelected();
+        	refreshHighlighted();
+        	refreshTableInfo();
         });
 
         $('#groundvehicle_filter').on('click', function() {
@@ -339,6 +351,7 @@ function initialize() {
             mapResizeTimeout = setTimeout(updateMapSize, 10);
         });
 
+        filterBPFVplanes(false);
         filterGroundVehicles(false);
         filterBlockedMLAT(false);
         toggleAltitudeChart(false);
@@ -1779,6 +1792,24 @@ function onFilterByAltitude(e) {
     }
 }
 
+function filterBPFVplanes(switchFilter) {
+	if (typeof localStorage['bpfvPlaneFilter'] === 'undefined') {
+		localStorage.setItem('bpfvPlaneFilter','not_filtered');
+	}
+
+	var bpfvPlaneFilter = localStorage.getItem('bpfvPlaneFilter');
+	if (switchFilter === true) {
+		bpfvPlaneFilter = (bpfvPlaneFilter === 'not_filtered') ? 'filtered' : 'not_filtered';
+	}
+	if (bpfvPlaneFilter === 'filtered') {
+		$('#bpfvplane_filter').addClass('settingsCheckboxChecked');
+	} else {
+		$('#bpfvplane_filter').removeClass('settingsCheckboxChecked');
+	}
+	localStorage.setItem('bpfvPlaneFilter', bpfvPlaneFilter);
+	PlaneFilter.bpfvPlanes = bpfvPlaneFilter;
+}
+
 function filterGroundVehicles(switchFilter) {
 	if (typeof localStorage['groundVehicleFilter'] === 'undefined') {
 		localStorage.setItem('groundVehicleFilter' , 'not_filtered');
@@ -1899,7 +1930,8 @@ function getFlightAwareModeSLink(code, ident, linkText) {
 
 function getFlightAwarePhotoLink(registration) {
     if (registration !== null && registration !== "") {
-        return "<a target=\"_blank\" href=\"https://flightaware.com/photos/aircraft/" + registration.replace(/[^0-9a-z]/ig,'') + "\">See Photos</a>";
+        return "<a target=\"_blank\" href=\"https://www.jetphotos.com/photo/keyword/" + registration + "\">See Photos</a>";
+//        return "<a target=\"_blank\" href=\"https://flightaware.com/photos/aircraft/" + registration.replace(/[^0-9a-z]/ig,'') + "\">See Photos</a>";
     }
 
     return "";   

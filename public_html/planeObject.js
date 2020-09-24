@@ -7,7 +7,20 @@ function PlaneObject(icao) {
         this.flight    = null;
         this.squawk    = null;
         this.selected  = false;
-        this.category  = null;
+        this.category = null;
+        // BPFV plane?
+        if (typeof this.icao === 'string' && (
+                this.icao === '3d08d7' || // PF
+                this.icao === '3d08df' || // PN
+                this.icao === '3d08e9' || // PX
+                this.icao === '3d08eb' || // PZ
+                this.icao === '3d1a5f' || // FV
+                this.icao === '3d2580' )) // LK
+        {
+                this.bpfvPlane = true;
+        } else {
+                this.bpfvPlane = false;
+        }
 
 	// Basic location information
         this.altitude       = null;
@@ -127,6 +140,13 @@ PlaneObject.prototype.isFiltered = function() {
     // filter out blocked MLAT flights
     if (typeof this.filter.blockedMLAT !== 'undefined' && this.filter.blockedMLAT === 'filtered') {
         if (typeof this.icao === 'string' && this.icao.startsWith('~')) {
+            return true;
+        }
+    }
+
+    // Filter out non BPFV planes
+    if (typeof this.filter.bpfvPlanes !== 'undefined' && this.filter.bpfvPlanes === 'filtered') {
+        if (!this.bpfvPlane) {
             return true;
         }
     }
@@ -396,7 +416,12 @@ PlaneObject.prototype.updateIcon = function() {
         var opacity = 1.0;
         var outline = (this.position_from_mlat ? OutlineMlatColor : OutlineADSBColor);
         var add_stroke = (this.selected && !SelectedAllPlanes) ? ' stroke="black" stroke-width="1px"' : '';
-        var baseMarker = getBaseMarker(this.category, this.icaotype, this.typeDescription, this.wtc);
+
+        if (this.bpfvPlane) {
+                outline = OutlineBPFVColor;
+        }
+
+       var baseMarker = getBaseMarker(this.category, this.icaotype, this.typeDescription, this.wtc);
         var rotation = this.track;
         if (rotation === null) {
                 rotation = this.true_heading;

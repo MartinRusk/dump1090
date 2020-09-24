@@ -23,11 +23,12 @@
 		<script type="text/javascript" src="flags.js?v=3.8.1"></script>
 		<script type="text/javascript" src="layers.js?v=3.8.1"></script>
 		<script type="text/javascript" src="script.js?v=3.8.1"></script>
-		<title>PiAware SkyAware</title>
+		<title>BPFV SkyMon</title>
 	</head>
 
 	<body onload="initialize()">
 		<div id="loader" class="hidden">
+			<img src="images/bpfv_logo.png" id="bpfv_logo">
 			<img src="spinny.gif" id="spinny" alt="Loading...">
 			<progress id="loader_progress"></progress>
 		</div>
@@ -48,9 +49,9 @@
 
 		<div id="header" class="infoHeading">
 			<div class="logoContainer">
-				<a href="http://flightaware.com/" target="_blank"><img src="images/fa_logo_color.png" alt="FlightAware" class="flightawareLogo" srcset="images/fa_logo_color.png 1x, images/fa_logo_color@2x.png 2x, images/fa_logo_color@3x.png 3x"></a>
-				<img src="images/pa-sa-logo.png" alt="PiAware SkyAware" class="adsbLogo piAwareLogo" srcset="images/pa-sa-logo.png 1x, images/pa-sa-logo@2x.png 2x, images/pa-sa-logo@3x.png 3x">
-				<img src="images/ff-sa-logo.png" alt="FlightFeeder SkyAware" class="adsbLogo flightfeederLogo" srcset="images/ff-sa-logo.png 1x, images/ff-sa-logo@2x.png 2x, images/ff-sa-logo@3x.png 3x" style="display: none;">
+				<a href="http://bpfv.net/" target="_blank"><img src="images/bpfv_logo.png" alt="BPFV" class="flightawareLogo" srcset="images/bpfv_logo.png 1x, images/bpfv_logo@2x.png 2x, images/bpfv_logo@3x.png 3x"></a>
+				<img src="images/bpfv-sm-logo.png" alt="BPFV SkyMon" class="adsbLogo piAwareLogo" srcset="images/bpfv-sm-logo.png 1x, images/bpfv-sm-logo@2x.png 2x, images/bpfv-sm-logo@3x.png 3x" >
+				<img src="images/ff-sa-logo.png" alt="FlightFeeder SkyAware" class="adsbLogo flightfeederLogo" srcset="images/ff-sv-logo.png 1x, images/ff-sv-logo@2x.png 2x, images/ff-sv-logo@3x.png 3x" style="display: none;">
 			</div>
 			<div class="buttonContainer">
 				<div class="dateTime" id="clock_div"></div>
@@ -114,7 +115,7 @@
 					</div>
 					<div class="settingsOptionContainer">
 						<div class="settingsCheckbox" id="sitepos_checkbox"></div>
-						<div class="settingsText">Site Position and Range Rings</div>
+						<div class="settingsText">Range Rings</div>
 					</div>
 					<div class="settingsOptionContainer">
 						<div class="settingsCheckbox" id="actrail_checkbox"></div>
@@ -134,12 +135,16 @@
 						<div class="infoBlockTitleText">View Toggles</div>
 					</div>
 					<div class="settingsOptionContainer">
+						<div class="settingsCheckbox" id="bpfvplane_filter"></div>
+						<div class="settingsText">Only BPFV Planes</div>
+					</div>
+					<div class="settingsOptionContainer">
 						<div class="settingsCheckbox" id="blockedmlat_filter"></div>
-						<div class="settingsText">Show Anonymous MLAT Tracks</div>
+						<div class="settingsText">Show MLAT Tracks</div>
 					</div>
 					<div class="settingsOptionContainer">
 						<div class="settingsCheckbox" id="groundvehicle_filter"></div>
-						<div class="settingsText">Show Ground Vehicles and Other Non-Aircraft Positions</div>
+						<div class="settingsText">Show Ground Vehicles</div>
 					</div>
 					<div class="settingsOptionContainer">
 						<div class="settingsCheckbox" id="selectall_checkbox"></div>
@@ -253,7 +258,7 @@
 										<tbody>
 											<tr id="plane_row_template" class="plane_table_row hidden">
 												<td class="icaoCodeColumn">ICAO</td>
-												<td><img style="width: 20px; height=12px" src="about:blank" alt="Flag"></td>
+												<td><img style="width: 20px; height: 12px" src="about:blank" alt="Flag"></td>
 												<td>FLIGHT</td>
 												<td>REGISTRATION</td>
 												<td>AIRCRAFT_TYPE</td>

@@ -149,7 +149,7 @@ var TypeDesignatorIcons = {
         'CVLP': 'twin_large',
         'D228': 'twin_small',
         'DA36': 'hi_perf',
-        'DA50': 'airliner',
+        'DA50': 'hi_perf',
         'DC10': 'heavy_2e',
         'DC3':  'twin_large',
         'DC3S': 'twin_large',
