@@ -18,4 +18,4 @@ bladeRF support is disabled by default
 
 ### Dependencies - rtlsdr
 
-rltsdr support is enabled by default
+rtlsdr support is enabled by default
