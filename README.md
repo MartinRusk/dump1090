@@ -8,7 +8,9 @@ It is designed to build as a Debian package.
 
 ## Building and installation
 
+```bash
 sudo bash -c "$(wget -O - https://raw.githubusercontent.com/MartinRusk/dump1090/master/install-dump1090-fa.sh)"
+```
 
 ### Dependencies - bladeRF
 
